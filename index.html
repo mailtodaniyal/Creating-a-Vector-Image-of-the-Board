@@ -1,0 +1,83 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Crazy Thermometer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 20px;
+        }
+        svg {
+            border: 1px solid #ccc;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Crazy Thermometer</h1>
+    <svg id="spiralBoard" width="800" height="800" xmlns="http://www.w3.org/2000/svg"></svg>
+
+    <script>
+        const svg = document.getElementById("spiralBoard");
+        const colors = ["#1E3A8A", "#60A5FA", "#86EFAC", "#15803D", "#FACC15", "#FB923C", "#EF4444", "#EC4899"];
+        const centerX = 400;
+        const centerY = 400;
+        const totalSquares = 41;
+        const angleStep = 20;
+        const squareWidth = 30;
+        const squareHeight = 20;
+        const spiralSpacing = 10;
+
+        function drawSpiralBoard() {
+            for (let i = 0; i < totalSquares; i++) {
+                const angle = i * angleStep * Math.PI / 180;
+                const radius = 30 + i * spiralSpacing;
+                const x = centerX + radius * Math.cos(angle);
+                const y = centerY + radius * Math.sin(angle);
+
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const rotation = angle * 180 / Math.PI;
+
+                const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                rect.setAttribute("x", -squareWidth / 2);
+                rect.setAttribute("y", -squareHeight / 2);
+                rect.setAttribute("width", squareWidth);
+                rect.setAttribute("height", squareHeight);
+                rect.setAttribute("fill", color);
+                rect.setAttribute("stroke", "black");
+                rect.setAttribute("stroke-width", 1);
+                rect.setAttribute("transform", `translate(${x}, ${y}) rotate(${rotation})`);
+                svg.appendChild(rect);
+
+                const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                label.setAttribute("x", x);
+                label.setAttribute("y", y + 4);
+                label.setAttribute("font-size", "10");
+                label.setAttribute("fill", "black");
+                label.setAttribute("text-anchor", "middle");
+                label.textContent = i - 20;
+                svg.appendChild(label);
+            }
+
+            // Draw rainbow center
+            const rainbowColors = ["#FF0000", "#FF7F00", "#FFFF00", "#00FF00", "#0000FF", "#4B0082", "#8B00FF"];
+            for (let i = 0; i < rainbowColors.length; i++) {
+                const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                circle.setAttribute("cx", centerX);
+                circle.setAttribute("cy", centerY);
+                circle.setAttribute("r", 10 - i);
+                circle.setAttribute("fill", rainbowColors[i]);
+                svg.appendChild(circle);
+            }
+        }
+
+        drawSpiralBoard();
+    </script>
+</body>
+</html>
